@@ -15,7 +15,7 @@ function initHlsPlayer(conf, videoelemid, donecb) {
   hls.on(Hls.Events.MEDIA_ATTACHED, function() {
     hls.loadSource(conf.manifest);
     hls.on(Hls.Events.MANIFEST_PARSED, function(ev, data) {
-      videoelem.muted = true;
+      videoelem.muted = false;
       videoelem.play();
       donecb(videoelem);
     });
@@ -60,7 +60,7 @@ function initDashPlayer(conf, videoelemid, donecb) {
   });
 
   shakap.load(conf.manifest).then(function(ev) {
-    videoelem.muted = true;
+    videoelem.muted = false;
     shakap.setMaxHardwareResolution(600, 600);
     videoelem.play();
     donecb(videoelem);
@@ -104,12 +104,6 @@ function initViewPortRow(row, numcols, config) {
     c = config['row'+row][i];
     if (c) {
       initViewPort(c, videoelemid);
-    }else if (config['placeholder'] !== undefined &&  config['placeholder'][0] !== undefined){
-	c = config['placeholder'][0];
-        initViewPort(c, videoelemid);
-    }else{
-	var divelem = document.getElementById("vp"+row+i+'-div');
-	divelem.style.display="none";
     }
   }
 }
@@ -118,7 +112,7 @@ function activateViewPort(videoelemid) {
   if (activeViewPort) {
     currentActiveVideoElem = document.getElementById(activeViewPort);
     currentActiveVideoElem.className = currentActiveVideoElem.className.replace("video-unmuted", "");
-    currentActiveVideoElem.muted = true;
+    currentActiveVideoElem.muted = false;
   }
   if (activeViewPort != videoelemid) {
     newActiveVideoElem = document.getElementById(videoelemid);
@@ -154,11 +148,15 @@ function initMultiView(config) {
     shaka.polyfill.installAll();
     initViewPortRow(0, 4, config);
     initViewPortRow(1, 4, config);
+    initViewPortRow(2, 4, config);
     if(config['row0'][0]) { 
       initViewPort(config['row0'][0], 'vpleft');
     }
     if(config['row1'][0]) { 
       initViewPort(config['row1'][0], 'vpright');
+    }
+    if(config['row2'][0]) { 
+      initViewPort(config['row2'][0], 'vpright');
     }
   }
 }

@@ -1,104 +1,563 @@
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel='stylesheet' href='stylesheets/style.css' />
-  </head>
-  <body>
-    <div class="col-md-12" id="multiview">
-      <div class="row">
-        <div class="col-md-4 vp vp-large" id="vp-left">
-          <div class="videoInfo tiny"></div>
-          <video id="vpleft"></video>
-          <div class="tiny overlay" id="vpleft-meta"></div>
-          <div id="vpleft-title"></div>
-        </div>
-        <div class="col-md-4 info">
-          <p class="tiny">Based on hls.js and ShakaPlayer</p>
-        </div>
-        <div class="col-md-4 vp vp-large">
-          <div class="videoInfo tiny"></div>
-          <video id="vpright"></video>
-          <div class="tiny overlay" id="vpright-meta"></div>
-          <div id="vpright-title"></div>
-        </div>
-        <div><p class="tiny text-center">Click on viewport to activate audio | SPACE - pause/resume | F - toggle fullscreen | 1-8 - activate viewport</p>
-        </div>
-        <div id="audioMeter"></div>
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel='stylesheet' href='stylesheets/style.css' />
+  <script src="https://cdn.jsdelivr.net/hls.js/latest/hls.min.js"></script>
+</head>
+<body>
+  <div class="col-md-12" id="multiview">
+    <div class="row">
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp00" class="video-active vp00"></video>
+        <div class="shortcut">1</div>
+        <div class="tiny overlay" id="vp00-meta"></div>
+        <div class="title" id="vp00-title"></div>
+        <div id="my-peak-meter" class="meter1" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute1" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
       </div>
-      <div class="row">
-        <div class="col-md-3 vp" id="vp00-div">
-          <div class="videoInfo tiny"></div>
-          <video id="vp00" class="video-active"></video>
-          <div class="shortcut">1</div>
-          <div class="tiny overlay" id="vp00-meta"></div>
-          <div class="title" id="vp00-title"></div>
-        </div>
-        <div class="col-md-3 vp" id="vp01-div">
-          <div class="videoInfo tiny"></div>
-          <video id="vp01" class="video-active"></video>
-          <div class="shortcut">2</div>
-          <div class="tiny overlay" id="vp01-meta"></div>
-          <div class="title" id="vp01-title"></div>
-        </div>
-        <div class="col-md-3 vp" id="vp02-div">
-          <div class="videoInfo tiny"></div>
-          <video id="vp02" class="video-active"></video>
-          <div class="shortcut">3</div>
-          <div class="tiny overlay" id="vp02-meta"></div>
-          <div class="title" id="vp02-title"></div>
-        </div>
-        <div class="col-md-3 vp" id="vp03-div">
-          <div class="videoInfo tiny"></div>
-          <video id="vp03" class="video-active"></video>
-          <div class="shortcut">4</div>
-          <div class="tiny overlay" id="vp03-meta"></div>
-          <div class="title" id="vp03-title"></div>
-        </div>
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp01" class="video-active vp01"></video>
+        <div class="shortcut">2</div>
+        <div class="tiny overlay" id="vp01-meta"></div>
+        <div class="title" id="vp01-title"></div>
+        <div id="my-peak-meter" class="meter2" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute2" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
       </div>
-      <div class="row">
-        <div class="col-md-3 vp" id="vp10-div">
-          <div class="videoInfo tiny"></div>
-          <video id="vp10" class="video-active"></video>
-          <div class="shortcut">5</div>
-          <div class="tiny overlay" id="vp10-meta"></div>
-          <div class="title" id="vp10-title"></div>
-        </div>
-        <div class="col-md-3 vp" id="vp11-div">
-          <div class="videoInfo tiny"></div>
-          <video id="vp11" class="video-active"></video>
-          <div class="shortcut">6</div>
-          <div class="tiny overlay" id="vp11-meta"></div>
-          <div class="title" id="vp11-title"></div>
-        </div>
-        <div class="col-md-3 vp" id="vp12-div">
-          <div class="videoInfo tiny"></div>
-          <video id="vp12" class="video-active"></video>
-          <div class="shortcut">7</div>
-          <div class="tiny overlay" id="vp12-meta"></div>
-          <div class="title" id="vp12-title"></div>
-        </div>
-        <div class="col-md-3 vp" id="vp13-div">
-          <div class="videoInfo tiny"></div>
-          <video id="vp13" class="video-active"></video>
-          <div class="shortcut">8</div>
-          <div class="tiny overlay" id="vp13-meta"></div>
-          <div class="title" id="vp13-title"></div>
-        </div>
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp02" class="video-active vp02"></video>
+        <div class="shortcut">3</div>
+        <div class="tiny overlay" id="vp02-meta"></div>
+        <div class="title" id="vp02-title"></div>
+        <div id="my-peak-meter" class="meter3" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute3" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
       </div>
-
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp03" class="video-active vp03"></video>
+        <div class="shortcut">4</div>
+        <div class="tiny overlay" id="vp03-meta"></div>
+        <div class="title" id="vp03-title"></div>
+        <div id="my-peak-meter" class="meter4" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute4" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+      </div>
     </div>
-    <script src="javascripts/hls.min.js" type="text/javascript"></script>
-    <script src="javascripts/shaka-player.compiled.js" type="text/javascript"></script>
-    <script src="javascripts/viewer.js" type="text/javascript"></script>
-    <script src="javascripts/hover.js" type="text/javascript"></script>
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <script type="text/javascript">
-      document.addEventListener("DOMContentLoaded", function(event) {
-        initMultiView(<%- conf %>);
-        initKeyControls();
-      });
-    </script>
-  </body>
-  </html>
+
+    <div class="row">
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp10" class="video-active vp10"></video>
+        <div class="shortcut">5</div>
+        <div class="tiny overlay" id="vp10-meta"></div>
+        <div class="title" id="vp10-title"></div>
+        <div id="my-peak-meter" class="meter5" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute5" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+      </div>
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp11" class="video-active vp11"></video>
+        <div class="shortcut">6</div>
+        <div class="tiny overlay" id="vp11-meta"></div>
+        <div class="title" id="vp11-title"></div>
+        <div id="my-peak-meter" class="meter6" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute6" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+      </div>
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp12" class="video-active vp12"></video>
+        <div class="shortcut">7</div>
+        <div class="tiny overlay" id="vp12-meta"></div>
+        <div class="title" id="vp12-title"></div>
+        <div id="my-peak-meter" class="meter7" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute7" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+
+      </div>
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp13" class="video-active vp13"></video>
+        <div class="shortcut">8</div>
+        <div class="tiny overlay" id="vp13-meta"></div>
+        <div class="title" id="vp13-title"></div>
+        <div id="my-peak-meter" class="meter8" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute8" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+      </div>
+    </div> 
+
+    <div class="row">
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp20" class="video-active vp20"></video>
+        <div class="shortcut">1</div>
+        <div class="tiny overlay" id="vp20-meta"></div>
+        <div class="title" id="vp20-title"></div>
+        <div id="my-peak-meter" class="meter9" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute9" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+      </div>
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp21" class="video-active vp21"></video>
+        <div class="shortcut">2</div>
+        <div class="tiny overlay" id="vp21-meta"></div>
+        <div class="title" id="vp21-title"></div>
+        <div id="my-peak-meter" class="meter10" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute10" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+      </div>
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp22" class="video-active vp22"></video>
+        <div class="shortcut">3</div>
+        <div class="tiny overlay" id="vp22-meta"></div>
+        <div class="title" id="vp22-title"></div>
+        <div id="my-peak-meter" class="meter11" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute11" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+      </div>
+      <div class="col-md-3 vp">
+        <div class="videoInfo tiny"></div>
+        <video id="vp23" class="video-active vp23"></video>
+        <div class="shortcut">4</div>
+        <div class="tiny overlay" id="vp23-meta"></div>
+        <div class="title" id="vp23-title"></div>
+        <div id="my-peak-meter" class="meter12" style="width: 2em; height: 100%; position: absolute; bottom: 0; left: 0;"></div>
+        <button class="mute12" style="color: black; position: absolute; bottom: 0; right: 0;">Audio</button>
+      </div>
+    </div>  
+    <div class="col-12">
+        <br />
+        <button class="start" style="color: black; margin: 0 auto; display: table; margin-bottom: 0.5em; font-size: 2em; ">Start</button>
+
+        <p class="tiny text-center">Powered by LSD Live - Based on hls.js and ShakaPlayer</p>
+        <p class="tiny text-center">Click on viewport to activate audio | SPACE - pause/resume | F - toggle fullscreen | 1-8 - activate viewport</p>
+    </div>
+
+  </div>
+  <script src="javascripts/hls.min.js" type="text/javascript"></script>
+  <script src="javascripts/shaka-player.compiled.js" type="text/javascript"></script>
+  <script src="javascripts/viewer.js" type="text/javascript"></script>
+  <script src="javascripts/hover.js" type="text/javascript"></script>
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(event) {
+      initMultiView(<%- conf %>);
+      initKeyControls();
+    });
+  </script>
+  
+  <script>
+    function start(){
+      myAudio.play();
+      location.reload();
+    }
+    var startbtn = document.querySelector('.start'); 
+    startbtn.onclick = start;
+  </script>
+
+  <script>
+    var webAudioPeakMeter1=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+    var myAudio = document.getElementById('vp00');
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode = audioCtx.createMediaElementSource(myAudio);
+    var meterNode = webAudioPeakMeter1.createMeterNode(sourceNode, audioCtx);
+    webAudioPeakMeter1.createMeter(myMeterElement, meterNode, {});
+    myAudio.addEventListener('play', function() {
+      audioCtx.resume();
+    });
+
+    var gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0 
+    gainNode.connect(audioCtx.destination)
+    sourceNode.connect(gainNode)
+
+    var mute = document.querySelector('.mute1'); 
+    mute.onclick = voiceMute;
+    
+
+    function voiceMute() {
+      if(mute.id == "") {
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        mute.id = "activated";
+        mute.textContent = "Unmute";
+      } else {
+        gainNode.gain.setValueAtTime(1, audioCtx.currentTime);
+        mute.id = "";
+        mute.textContent = "Mute";
+      }
+    }
+
+
+  </script>
+  <script>
+    var webAudioPeakMeter2=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+    var myMeterElement2 = document.querySelector(".meter2");
+    var myAudio2 = document.getElementById('vp01');
+    var audioCtx2 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode2 = audioCtx2.createMediaElementSource(myAudio2);
+    var meterNode2 = webAudioPeakMeter2.createMeterNode(sourceNode2, audioCtx2);
+    webAudioPeakMeter2.createMeter(myMeterElement2, meterNode2, {});
+    myAudio2.addEventListener('play', function() {
+      audioCtx2.resume();
+    });
+
+    var gainNode2 = audioCtx2.createGain();
+    gainNode2.gain.value = 0 
+    gainNode2.connect(audioCtx2.destination)
+    sourceNode2.connect(gainNode2)
+
+    var mute2 = document.querySelector('.mute2'); 
+    mute2.onclick = voiceMute2;
+
+    function voiceMute2() {
+      if(mute2.id == "") {
+        gainNode2.gain.setValueAtTime(0, audioCtx2.currentTime);
+        mute2.id = "activated";
+        mute2.textContent = "Unmute";
+      } else {
+        gainNode2.gain.setValueAtTime(1, audioCtx2.currentTime);
+        mute2.id = "";
+        mute2.textContent = "Mute";
+      }
+    }
+  </script>
+  <script>
+    var webAudioPeakMeter3=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+    var myMeterElement3 = document.querySelector(".meter3");
+    var myAudio3 = document.getElementById('vp02');
+    var audioCtx3 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode3 = audioCtx3.createMediaElementSource(myAudio3);
+    var meterNode3 = webAudioPeakMeter3.createMeterNode(sourceNode3, audioCtx3);
+    webAudioPeakMeter3.createMeter(myMeterElement3, meterNode3, {});
+    myAudio3.addEventListener('play', function() {
+      audioCtx3.resume();
+    });
+
+    var gainNode3 = audioCtx3.createGain();
+    gainNode3.gain.value = 0 
+    gainNode3.connect(audioCtx3.destination)
+    sourceNode3.connect(gainNode3)
+
+    var mute3 = document.querySelector('.mute3'); 
+    mute3.onclick = voiceMute3;
+    
+
+    function voiceMute3() {
+      if(mute3.id == "") {
+        gainNode3.gain.setValueAtTime(0, audioCtx3.currentTime);
+        mute3.id = "activated";
+        mute3.textContent = "Unmute";
+      } else {
+        gainNode3.gain.setValueAtTime(1, audioCtx3.currentTime);
+        mute3.id = "";
+        mute3.textContent = "Mute";
+      }
+    }
+  </script>
+  <script>
+    var webAudioPeakMeter4=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+    var myMeterElement4 = document.querySelector(".meter4");
+    var myAudio4 = document.getElementById('vp03');
+    var audioCtx4 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode4 = audioCtx4.createMediaElementSource(myAudio4);
+    var meterNode4 = webAudioPeakMeter4.createMeterNode(sourceNode4, audioCtx4);
+    webAudioPeakMeter4.createMeter(myMeterElement4, meterNode4, {});
+    myAudio4.addEventListener('play', function() {
+      audioCtx4.resume();
+    });
+
+    var gainNode4 = audioCtx4.createGain();
+    gainNode4.gain.value = 0 
+    gainNode4.connect(audioCtx4.destination)
+    sourceNode4.connect(gainNode4)
+
+    var mute4 = document.querySelector('.mute4'); 
+    mute4.onclick = voiceMute4;
+    
+
+    function voiceMute4() {
+      if(mute4.id == "") {
+        gainNode4.gain.setValueAtTime(0, audioCtx4.currentTime);
+        mute4.id = "activated";
+        mute4.textContent = "Unmute";
+      } else {
+        gainNode4.gain.setValueAtTime(1, audioCtx4.currentTime);
+        mute4.id = "";
+        mute4.textContent = "Mute";
+      }
+    }
+  </script>
+  <script>
+        var webAudioPeakMeter5=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+
+    var myMeterElement5 = document.querySelector(".meter5");
+    var myAudio5 = document.getElementById('vp10');
+    var audioCtx5 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode5 = audioCtx5.createMediaElementSource(myAudio5);
+    var meterNode5 = webAudioPeakMeter5.createMeterNode(sourceNode5, audioCtx5);
+    webAudioPeakMeter5.createMeter(myMeterElement5, meterNode5, {});
+    myAudio5.addEventListener('play', function() {
+      audioCtx5.resume();
+    });
+
+    var gainNode5 = audioCtx5.createGain();
+    gainNode5.gain.value = 0 
+    gainNode5.connect(audioCtx5.destination)
+    sourceNode5.connect(gainNode5)
+
+    var mute5 = document.querySelector('.mute5'); 
+    mute5.onclick = voiceMute5;
+    
+
+    function voiceMute5() {
+      if(mute5.id == "") {
+        gainNode5.gain.setValueAtTime(0, audioCtx5.currentTime);
+        mute5.id = "activated";
+        mute5.textContent = "Unmute";
+      } else {
+        gainNode5.gain.setValueAtTime(1, audioCtx5.currentTime);
+        mute5.id = "";
+        mute5.textContent = "Mute";
+      }
+    }
+  </script>
+  <script>
+            var webAudioPeakMeter6=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+
+    var myMeterElement6 = document.querySelector(".meter6");
+    var myAudio6 = document.getElementById('vp11');
+    var audioCtx6 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode6 = audioCtx6.createMediaElementSource(myAudio6);
+    var meterNode6 = webAudioPeakMeter6.createMeterNode(sourceNode6, audioCtx6);
+    webAudioPeakMeter6.createMeter(myMeterElement6, meterNode6, {});
+    myAudio6.addEventListener('play', function() {
+      audioCtx6.resume();
+    });
+
+    var gainNode6 = audioCtx6.createGain();
+    gainNode6.gain.value = 0 
+    gainNode6.connect(audioCtx6.destination)
+    sourceNode6.connect(gainNode6)
+
+    var mute6 = document.querySelector('.mute6'); 
+    mute6.onclick = voiceMute6;
+    
+
+    function voiceMute6() {
+      if(mute6.id == "") {
+        gainNode6.gain.setValueAtTime(0, audioCtx6.currentTime);
+        mute6.id = "activated";
+        mute6.textContent = "Unmute";
+      } else {
+        gainNode6.gain.setValueAtTime(1, audioCtx6.currentTime);
+        mute6.id = "";
+        mute6.textContent = "Mute";
+      }
+    }
+  </script>
+  <script>
+    var webAudioPeakMeter7=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+    var myMeterElement7 = document.querySelector(".meter7");
+    var myAudio7 = document.getElementById('vp12');
+    var audioCtx7 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode7 = audioCtx7.createMediaElementSource(myAudio7);
+    var meterNode7 = webAudioPeakMeter7.createMeterNode(sourceNode7, audioCtx7);
+    webAudioPeakMeter7.createMeter(myMeterElement7, meterNode7, {});
+    myAudio7.addEventListener('play', function() {
+      audioCtx7.resume();
+    });
+
+    var gainNode7 = audioCtx7.createGain();
+    gainNode7.gain.value = 0 
+    gainNode7.connect(audioCtx7.destination)
+    sourceNode7.connect(gainNode7)
+
+    var mute7 = document.querySelector('.mute7'); 
+    mute7.onclick = voiceMute7;
+    
+
+    function voiceMute7() {
+      if(mute7.id == "") {
+        gainNode7.gain.setValueAtTime(0, audioCtx7.currentTime);
+        mute7.id = "activated";
+        mute7.textContent = "Unmute";
+      } else {
+        gainNode7.gain.setValueAtTime(1, audioCtx7.currentTime);
+        mute7.id = "";
+        mute7.textContent = "Mute";
+      }
+    }
+  </script>
+  <script>
+    var webAudioPeakMeter8=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+
+    var myMeterElement8 = document.querySelector(".meter8");
+    var myAudio8 = document.getElementById('vp13');
+    var audioCtx8 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode8 = audioCtx8.createMediaElementSource(myAudio8);
+    var meterNode8 = webAudioPeakMeter8.createMeterNode(sourceNode8, audioCtx8);
+    webAudioPeakMeter8.createMeter(myMeterElement8, meterNode8, {});
+    myAudio8.addEventListener('play', function() {
+      audioCtx8.resume();
+    });
+
+    var gainNode8 = audioCtx8.createGain();
+    gainNode8.gain.value = 0 
+    gainNode8.connect(audioCtx8.destination)
+    sourceNode8.connect(gainNode8)
+
+    var mute8 = document.querySelector('.mute8'); 
+    mute8.onclick = voiceMute8;
+    
+
+    function voiceMute8() {
+      if(mute8.id == "") {
+        gainNode8.gain.setValueAtTime(0, audioCtx8.currentTime);
+        mute8.id = "activated";
+        mute8.textContent = "Unmute";
+      } else {
+        gainNode8.gain.setValueAtTime(1, audioCtx8.currentTime);
+        mute8.id = "";
+        mute8.textContent = "Mute";
+      }
+    }
+  </script>
+  <script>
+    var webAudioPeakMeter9=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+
+    var myMeterElement9 = document.querySelector(".meter9");
+    var myAudio9 = document.getElementById('vp20');
+    var audioCtx9 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode9 = audioCtx9.createMediaElementSource(myAudio9);
+    var meterNode9 = webAudioPeakMeter9.createMeterNode(sourceNode9, audioCtx9);
+    webAudioPeakMeter9.createMeter(myMeterElement9, meterNode9, {});
+    myAudio9.addEventListener('play', function() {
+      audioCtx9.resume();
+    });
+
+    var gainNode9 = audioCtx9.createGain();
+    gainNode9.gain.value = 0 
+    gainNode9.connect(audioCtx9.destination)
+    sourceNode9.connect(gainNode9)
+
+    var mute9 = document.querySelector('.mute9'); 
+    mute9.onclick = voiceMute9;
+    
+
+    function voiceMute9() {
+      if(mute9.id == "") {
+        gainNode9.gain.setValueAtTime(0, audioCtx9.currentTime);
+        mute9.id = "activated";
+        mute9.textContent = "Unmute";
+      } else {
+        gainNode9.gain.setValueAtTime(1, audioCtx9.currentTime);
+        mute9.id = "";
+        mute9.textContent = "Mute";
+      }
+    }
+  </script>
+   <script>
+    var webAudioPeakMeter10=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+
+    var myMeterElement10 = document.querySelector(".meter10");
+    var myAudio10 = document.getElementById('vp21');
+    var audioCtx10 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode10 = audioCtx10.createMediaElementSource(myAudio10);
+    var meterNode10 = webAudioPeakMeter10.createMeterNode(sourceNode10, audioCtx10);
+    webAudioPeakMeter10.createMeter(myMeterElement10, meterNode10, {});
+    myAudio10.addEventListener('play', function() {
+      audioCtx10.resume();
+    });
+
+    var gainNode10 = audioCtx10.createGain();
+    gainNode10.gain.value = 0 
+    gainNode10.connect(audioCtx10.destination)
+    sourceNode10.connect(gainNode10)
+
+    var mute10 = document.querySelector('.mute10'); 
+    mute10.onclick = voiceMute10;
+    
+
+    function voiceMute10() {
+      if(mute10.id == "") {
+        gainNode10.gain.setValueAtTime(0, audioCtx10.currentTime);
+        mute10.id = "activated";
+        mute10.textContent = "Unmute";
+      } else {
+        gainNode10.gain.setValueAtTime(1, audioCtx10.currentTime);
+        mute10.id = "";
+        mute10.textContent = "Mute";
+      }
+    }
+  </script>
+   <script>
+    var webAudioPeakMeter11=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+
+    var myMeterElement11 = document.querySelector(".meter11");
+    var myAudio11 = document.getElementById('vp22');
+    var audioCtx11 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode11 = audioCtx11.createMediaElementSource(myAudio11);
+    var meterNode11 = webAudioPeakMeter11.createMeterNode(sourceNode11, audioCtx11);
+    webAudioPeakMeter11.createMeter(myMeterElement11, meterNode11, {});
+    myAudio11.addEventListener('play', function() {
+      audioCtx11.resume();
+    });
+
+    var gainNode11 = audioCtx11.createGain();
+    gainNode11.gain.value = 0 
+    gainNode11.connect(audioCtx11.destination)
+    sourceNode11.connect(gainNode11)
+
+    var mute11 = document.querySelector('.mute11'); 
+    mute11.onclick = voiceMute11;
+    
+
+    function voiceMute11() {
+      if(mute11.id == "") {
+        gainNode11.gain.setValueAtTime(0, audioCtx11.currentTime);
+        mute11.id = "activated";
+        mute11.textContent = "Unmute";
+      } else {
+        gainNode11.gain.setValueAtTime(1, audioCtx11.currentTime);
+        mute11.id = "";
+        mute11.textContent = "Mute";
+      }
+    }
+  </script>
+   <script>
+    var webAudioPeakMeter12=function(){"use strict";var t,e,n,o,i,r,l={borderSize:2,fontSize:9,backgroundColor:"black",tickColor:"#ddd",gradient:["red 1%","#ff0 16%","lime 45%","#080 100%"],dbRange:48,dbTickSize:6,maskTransition:"0.1s"},a=!0,s=1,d=[],c=[],p=[],f=[],u=[],y=function(t,e){return Math.log(e)/Math.log(t)},h=function(t){return 20*y(10,t)},x=function(e){for(var n in e)e.hasOwnProperty(n)&&(l[n]=e[n]);t=2*l.fontSize,r=1.5*l.fontSize+l.borderSize},g=function(t,e){var n=t.channelCount,o=e.createScriptProcessor(2048,n,n);return t.connect(o),o.connect(e.destination),o},v=function(t){var o=document.createElement("div");return o.style.position="relative",o.style.width=e+"px",o.style.height=n+"px",o.style.backgroundColor=l.backgroundColor,t.appendChild(o),o},b=function(y,h,g){x(g),e=y.clientWidth,n=y.clientHeight;var b=v(y);e>n&&(a=!1),o=n-r-l.borderSize,i=e-t-l.borderSize,S(b),z(b,i,o,r,t),s=h.channelCount;var m=i/s;a||(m=o/s);var T=t;a||(T=r);for(var E=0;E<s;E++)k(b,l.borderSize,r,T,!1),d[E]=k(b,m,r,T,l.maskTransition),c[E]=0,p[E]=C(b,m,T),T+=m,f[E]=0,u[E]="-âˆž";h.onaudioprocess=w,b.addEventListener("click",function(){for(var t=0;t<s;t++)c[t]=0,u[t]="-âˆž"},!1),M()},S=function(e){var n=Math.floor(l.dbRange/l.dbTickSize),r=0;if(a)for(var s=l.fontSize+l.borderSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.top=s+"px",c.textContent=r+"",r-=l.dbTickSize,s+=o/n}else{t=i/n;for(var p=2*l.fontSize,d=0;d<n;d++){var c=document.createElement("div");e.appendChild(c),c.style.width=t+"px",c.style.textAlign="right",c.style.color=l.tickColor,c.style.fontSize=l.fontSize+"px",c.style.position="absolute",c.style.right=p+"px",c.textContent=r+"",r-=l.dbTickSize,p+=t}}},z=function(t,e,n,o,i){var r=document.createElement("div");if(t.appendChild(r),r.style.width=e+"px",r.style.height=n+"px",r.style.position="absolute",r.style.top=o+"px",a){r.style.left=i+"px";var s="linear-gradient(to bottom, "+l.gradient.join(", ")+")"}else{r.style.left=l.borderSize+"px";var s="linear-gradient(to left, "+l.gradient.join(", ")+")"}return r.style.backgroundImage=s,r},C=function(t,e,n){var o=document.createElement("div");return t.appendChild(o),o.style.textAlign="center",o.style.color=l.tickColor,o.style.fontSize=l.fontSize+"px",o.style.position="absolute",o.textContent="-âˆž",a?(o.style.width=e+"px",o.style.top=l.borderSize+"px",o.style.left=n+"px"):(o.style.width=2*l.fontSize+"px",o.style.right=l.borderSize+"px",o.style.top=.25*e+n+"px"),o},k=function(t,e,n,r,s){var d=document.createElement("div");return t.appendChild(d),d.style.position="absolute",a?(d.style.width=e+"px",d.style.height=o+"px",d.style.top=n+"px",d.style.left=r+"px"):(d.style.width=i+"px",d.style.height=e+"px",d.style.top=r+"px",d.style.right=2*l.fontSize+"px"),d.style.backgroundColor=l.backgroundColor,s&&(a?d.style.transition="height "+l.maskTransition:d.style.transition="width "+l.maskTransition),d},m=function(t){var e=a?o:i;if(0===t)return e;var n=l.dbRange*-1,r=Math.floor(h(t)*e/n);return r>e?e:r},w=function(t){var e,n=t.inputBuffer,i=[],r=[];for(e=0;e<s;e++)i[e]=n.getChannelData(e),r[e]=0;for(var l=0;l<n.length;l++)for(e=0;e<s;e++)Math.abs(i[e][l])>r[e]&&(r[e]=Math.abs(i[e][l]));for(e=0;e<s;e++)f[e]=m(r[e],o),r[e]>c[e]&&(c[e]=r[e],u[e]=h(c[e]).toFixed(1))},M=function(){for(var t=0;t<s;t++)a?d[t].style.height=f[t]+"px":d[t].style.width=f[t]+"px",p[t].textContent=u[t];window.requestAnimationFrame(M)};return{createMeterNode:g,createMeter:b}}();    var myMeterElement = document.querySelector(".meter1");
+
+    var myMeterElement12 = document.querySelector(".meter12");
+    var myAudio12 = document.getElementById('vp23');
+    var audioCtx12 = new (window.AudioContext || window.webkitAudioContext)();
+    var sourceNode12 = audioCtx12.createMediaElementSource(myAudio12);
+    var meterNode12 = webAudioPeakMeter12.createMeterNode(sourceNode12, audioCtx12);
+    webAudioPeakMeter12.createMeter(myMeterElement12, meterNode12, {});
+    myAudio12.addEventListener('play', function() {
+      audioCtx12.resume();
+    });
+
+    var gainNode12 = audioCtx12.createGain();
+    gainNode12.gain.value = 0 
+    gainNode12.connect(audioCtx12.destination)
+    sourceNode12.connect(gainNode12)
+
+    var mute12 = document.querySelector('.mute12'); 
+    mute12.onclick = voiceMute12;
+    
+
+    function voiceMute12() {
+      if(mute12.id == "") {
+        gainNode12.gain.setValueAtTime(0, audioCtx12.currentTime);
+        mute12.id = "activated";
+        mute12.textContent = "Unmute";
+      } else {
+        gainNode12.gain.setValueAtTime(1, audioCtx12.currentTime);
+        mute12.id = "";
+        mute12.textContent = "Mute";
+      }
+    }
+  </script>
+  
+</body>
+</html>
